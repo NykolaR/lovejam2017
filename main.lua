@@ -1,9 +1,13 @@
-local _INITIALWIDTH, _INITIALHEIGHT = 32 * 8, 30 * 8
-local _CANVAS = love.graphics.newCanvas (32 * 8, 30 * 8, "rgba8")
+local _INITIALWIDTH, _INITIALHEIGHT = 20 * 8, 18 * 8
+local _CANVAS = love.graphics.newCanvas (_INITIALWIDTH, _INITIALHEIGHT, "rgba8")
 
 local _SCALE = 1
+local _SHADER = love.graphics.newShader ("assets/shaders/shade.glsl")
 
+
+local Play = require ("src.control.states.play")
 local Input = require ("src.boundary.input")
+local Palette = require ("src.boundary.palettes")
 
 local font = love.graphics.newImageFont ("assets/visual/font.png",
     " abcdefghijklmnopqrstuvwxyz0123456789", 1)
@@ -12,11 +16,16 @@ love.graphics.setFont (font)
 function love.load ()
     love.window.setPosition (0, 0)
     _CANVAS:setFilter ("nearest", "nearest")
+    Palette.loadPalette (_SHADER)
+
+    Play.loadArea ()
 end
 
 function love.update (dt)
     Input.handleInputs ()
     checkQuit ()
+
+    Play.update (dt)
 end
 
 function love.draw ()
@@ -31,7 +40,11 @@ function love.draw ()
         scaleScreen ()
     end
 
+    Play.render ()
+
+    love.graphics.setShader (_SHADER)
     love.graphics.setCanvas ()
+    love.graphics.setBlendMode ("alpha", "premultiplied")
     love.graphics.draw (_CANVAS, 0, 0, 0, _SCALE, _SCALE)
 end
 
@@ -55,4 +68,7 @@ function scaleScreen ()
 
     love.window.setMode (w2, h2)
     love.window.setPosition (0, 0)
+
+    _SHADER = love.graphics.newShader ("assets/shaders/shade.glsl")
+    Palette.loadPalette (_SHADER)
 end

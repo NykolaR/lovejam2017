@@ -3,7 +3,7 @@ function love.conf (t)
     t.modules.touch = false
 
     t.window.title = "Boy and Bee"
-    t.window.width, t.window.height = 32 * 8, 30 * 8
+    t.window.width, t.window.height = 20 * 8, 18 * 8
 
     t.window.resizeable = false
 end
