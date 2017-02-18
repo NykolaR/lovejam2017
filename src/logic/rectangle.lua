@@ -63,6 +63,8 @@ function Rectangle:collision (rectangle)
         ret [Constants.Directions.RIGHT] = self:collidedRight (rectangle)
         ret [Constants.Directions.DOWN] = self:collidedBottom (rectangle)
         ret [Constants.Directions.LEFT] = self:collidedLeft (rectangle)
+    else
+        return nil
     end
 
     return ret
@@ -87,28 +89,28 @@ function Rectangle:verticalOverlap (rectangle)
 end
 
 function Rectangle:collidedTop (rectangle)
-    if ( (self.x > (rectangle.x - self.width)) and (self.x < rectangle.x + rectangle.width) ) then
+    if self:horizontalOverlap (rectangle) then
         return (   (self.yLast >= (rectangle.y + rectangle.height))   and   (self.y <= (rectangle.y + rectangle.height))   )
     end
     return false
 end
 
 function Rectangle:collidedRight (rectangle)
-    if ((self.y > (rectangle.y - self.height)) and (self.y < rectangle.y + rectangle.height)) then
+    if self:verticalOverlap (rectangle) then
         return (   ((self.xLast + self.width) <= rectangle.x)   and    ((self.x + self.width) >= rectangle.x)   )
     end
     return false
 end
 
 function Rectangle:collidedBottom (rectangle)
-    if ((self.x > (rectangle.x - self.width)) and (self.x < rectangle.x + rectangle.width)) then
+    if self:horizontalOverlap (rectangle) then
         return (   ((self.yLast + self.height) <= rectangle.y)   and   ((self.y + self.height) >= rectangle.y)   )
     end
     return false
 end
 
 function Rectangle:collidedLeft (rectangle)
-    if ( (self.y > (rectangle.y - self.height)) and (self.y < rectangle.y + rectangle.height) ) then
+    if self:verticalOverlap (rectangle) then
         return (   (self.xLast >= (rectangle.x + rectangle.width))   and   (self.x <= (rectangle.x + rectangle.width))   )
     end
     return false

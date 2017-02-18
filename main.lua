@@ -3,6 +3,7 @@ local _CANVAS = love.graphics.newCanvas (_INITIALWIDTH, _INITIALHEIGHT, "rgba8")
 
 local _SCALE = 1
 local _SHADER = love.graphics.newShader ("assets/shaders/shade.glsl")
+local _PALETTEINDEX = 1
 
 
 local Play = require ("src.control.states.play")
@@ -16,7 +17,7 @@ love.graphics.setFont (font)
 function love.load ()
     love.window.setPosition (0, 0)
     _CANVAS:setFilter ("nearest", "nearest")
-    Palette.loadPalette (_SHADER)
+    Palette.loadPalette (_SHADER, _PALETTEINDEX)
 
     Play.loadArea ()
 end
@@ -30,22 +31,24 @@ end
 
 function love.draw ()
     love.graphics.setCanvas (_CANVAS)
-    love.graphics.clear ()
+    love.graphics.setBlendMode ("alpha", "alphamultiply")
 
     if Input.keyDown (Input.KEYS.UP) then
         love.graphics.print ("hi there, this is a message 11011")
     end
 
-    if Input.keyPressed (Input.KEYS.DOWN) then
-        scaleScreen ()
-    end
-
+    love.graphics.setShader (_SHADER)
     Play.render ()
 
-    love.graphics.setShader (_SHADER)
+    love.graphics.origin ()
+    love.graphics.setShader ()
     love.graphics.setCanvas ()
     love.graphics.setBlendMode ("alpha", "premultiplied")
     love.graphics.draw (_CANVAS, 0, 0, 0, _SCALE, _SCALE)
+
+    if Input.keyPressed (Input.KEYS.DOWN) then
+        scaleScreen ()
+    end
 end
 
 function checkQuit ()
@@ -70,5 +73,5 @@ function scaleScreen ()
     love.window.setPosition (0, 0)
 
     _SHADER = love.graphics.newShader ("assets/shaders/shade.glsl")
-    Palette.loadPalette (_SHADER)
+    Palette.loadPalette (_SHADER, _PALETTEINDEX)
 end

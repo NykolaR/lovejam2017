@@ -28,7 +28,7 @@ Palettes [2] = {
 
 function Palettes.loadPalette (shader, index)
     for i=1, #Palettes [1] do
-        shader:sendColor ("col" .. i, Palettes [index or 2] [i])
+        shader:sendColor ("col" .. i, Palettes [index or 1] [i])
     end
 end
 

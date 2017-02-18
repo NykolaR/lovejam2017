@@ -28,9 +28,10 @@ function Area.loadArea ()
 
     for i = 1, #Area.environment do
         if not (Area.environment [i] == 0) then
-            table.insert (Area.collisions, Rectangle (Area.getX (i, tileSize), Area.getY (i, tileSize), tileSize))
+            table.insert (Area.collisions, Rectangle (Area.getX (i - 1), Area.getY (i - 1), Area.tileSize, Area.tileSize))
         end
     end
+
 end
 
 function Area.getX (index)
