@@ -23,5 +23,5 @@ vec4 effect (vec4 color, Image texture, vec2 texture_coords, vec2 screen_coords)
         colorOut = col5;
     }
 
-    return vec4 (colorOut, current.a);
+    return vec4 (colorOut, current.a * color.a);
 }

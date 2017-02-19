@@ -5,7 +5,6 @@ local _SCALE = 1
 local _SHADER = love.graphics.newShader ("assets/shaders/shade.glsl")
 local _PALETTEINDEX = 1
 
-
 local Play = require ("src.control.states.play")
 local Input = require ("src.boundary.input")
 local Palette = require ("src.boundary.palettes")
@@ -32,6 +31,8 @@ end
 function love.draw ()
     love.graphics.setCanvas (_CANVAS)
     love.graphics.setBlendMode ("alpha", "alphamultiply")
+
+    love.graphics.clear (Palette [_PALETTEINDEX] [3])
 
     if Input.keyDown (Input.KEYS.UP) then
         love.graphics.print ("hi there, this is a message 11011")

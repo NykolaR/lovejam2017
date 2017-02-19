@@ -57,7 +57,8 @@ function Camera.bound ()
 end
 
 function Camera.clear ()
-    love.graphics.rectangle ("fill", Camera.x, Camera.y, _SCREENWIDTH, _SCREENHEIGHT)
+    --love.graphics.setColor (120, 120, 120)
+    --love.graphics.rectangle ("fill", Camera.x, Camera.y, _SCREENWIDTH, _SCREENHEIGHT)
 end
 
 function Camera.setBounds (xMax, yMax)
@@ -65,7 +66,7 @@ function Camera.setBounds (xMax, yMax)
 end
 
 function Camera.update ()
-    love.graphics.translate (-Camera.x, -Camera.y)
+    love.graphics.translate (math.floor (-Camera.x), math.floor (-Camera.y))
 end
 
 return Camera
