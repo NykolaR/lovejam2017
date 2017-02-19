@@ -19,6 +19,8 @@ love.graphics.setFont (font)
 local GAMESTATE = {PLAY = 1, PAUSE = 2}
 local state = GAMESTATE.PLAY
 
+local PauseSounds = require ("src.boundary.audio.pause")
+
 function love.load ()
     love.window.setPosition (0, 0)
     _CANVAS:setFilter ("nearest", "nearest")
@@ -47,6 +49,7 @@ function love.update (dt)
             elseif Pause.selected == 3 then
                 love.event.quit ()
             end
+            PauseSounds.SELECT:play ()
         end
     end
 
@@ -57,6 +60,7 @@ function love.update (dt)
         elseif state == GAMESTATE.PAUSE then
             state = GAMESTATE.PLAY
         end
+        PauseSounds.OPEN:play ()
     end
 
     --print (love.timer.getFPS ())

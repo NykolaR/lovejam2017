@@ -18,7 +18,7 @@ input ["KEYS"] = {LEFT = 1, RIGHT = 2, UP = 3, DOWN = 4, JUMP = 5, ACTION = 6, P
 
 --[[ Keyboard mappings --]]
 input ["KEYBOARD_KEYS"] =
-{LEFT = {"left", "a"}, RIGHT = {"right", "d"}, UP = {"up", "w"}, DOWN = {"down", "s"}, JUMP = {"up", "w"}, ACTION = {" "}, PAUSE = {"return"}}
+{LEFT = {"left", "a"}, RIGHT = {"right", "d"}, UP = {"up", "w"}, DOWN = {"down", "s"}, JUMP = {"up", "w"}, ACTION = {"space"}, PAUSE = {"return"}}
 
 --[[ Joystick mappings --]]
 input ["JOYSTICK_KEYS"] =

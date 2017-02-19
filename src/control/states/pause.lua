@@ -3,6 +3,8 @@ local Pause = {}
 local Input = require ("src.boundary.input")
 local Palette = require ("src.boundary.palettes")
 
+local Sound = require ("src.boundary.audio.pause")
+
 Pause.OPTIONS = {"  palette  ", "screen size", "   quit   "}
 Pause.selected = 1
 
@@ -12,6 +14,7 @@ function Pause.update ()
         if Pause.selected < 1 then
             Pause.selected = #Pause.OPTIONS
         end
+        Sound.MOVE:play ()
     end
 
     if Input.keyPressed (Input.KEYS.DOWN) then
@@ -19,6 +22,7 @@ function Pause.update ()
         if Pause.selected > #Pause.OPTIONS then
             Pause.selected = 1
         end
+        Sound.MOVE:play ()
     end
 end
 
