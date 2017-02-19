@@ -19,6 +19,10 @@ function love.load ()
     Palette.loadPalette (_SHADER, _PALETTEINDEX)
 
     Play.loadArea ()
+
+    scaleScreen ()
+    scaleScreen ()
+    scaleScreen ()
 end
 
 function love.update (dt)
@@ -34,10 +38,6 @@ function love.draw ()
 
     love.graphics.clear (Palette [_PALETTEINDEX] [3])
 
-    if Input.keyDown (Input.KEYS.UP) then
-        love.graphics.print ("hi there, this is a message 11011")
-    end
-
     love.graphics.setShader (_SHADER)
     Play.render ()
 
@@ -47,9 +47,9 @@ function love.draw ()
     love.graphics.setBlendMode ("alpha", "premultiplied")
     love.graphics.draw (_CANVAS, 0, 0, 0, _SCALE, _SCALE)
 
-    if Input.keyPressed (Input.KEYS.DOWN) then
+    --[[if Input.keyPressed (Input.KEYS.DOWN) then
         scaleScreen ()
-    end
+    end]]
 end
 
 function checkQuit ()

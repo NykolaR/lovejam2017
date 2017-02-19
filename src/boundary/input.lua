@@ -14,15 +14,15 @@ local input = {}
 input ["INPUT"] = {KEY_DOWN = 1, KEY_PRESSED = 2} --[[ DO NOT MODIFY ]]--
 
 --[[ "Inputs" to be mapped --]]
-input ["KEYS"] = {LEFT = 1, RIGHT = 2, UP = 3, DOWN = 4, ACTION = 5, PAUSED = 6}
+input ["KEYS"] = {LEFT = 1, RIGHT = 2, UP = 3, DOWN = 4, JUMP = 5, ACTION = 6, PAUSE = 7}
 
 --[[ Keyboard mappings --]]
 input ["KEYBOARD_KEYS"] =
-{LEFT = {"left", "a"}, RIGHT = {"right", "d"}, UP = {"up", "w"}, DOWN = {"down", "s"}, ACTION = {" ", "z"}, PAUSED = {"return"}}
+{LEFT = {"left", "a"}, RIGHT = {"right", "d"}, UP = {"up", "w"}, DOWN = {"down", "s"}, JUMP = {"up", "w"}, ACTION = {" "}, PAUSE = {"return"}}
 
 --[[ Joystick mappings --]]
 input ["JOYSTICK_KEYS"] =
-{LEFT = {"dpleft"}, RIGHT = {"dpright"}, UP = {"dpup"}, DOWN = {"dpdown"}, ACTION = {"a"}, PAUSED = {"start"}}
+{LEFT = {"dpleft"}, RIGHT = {"dpright"}, UP = {"dpup"}, DOWN = {"dpdown"}, JUMP = {"dpup"}, ACTION = {"a"}, PAUSE = {"start"}}
 
 input ["keys"] = {}
 

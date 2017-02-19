@@ -7,7 +7,7 @@ local _SCREENHEIGHT = 18 * 8
 
 Camera.boundX, Camera.boundY = 0, 0
 Camera.x, Camera.y = 0, 0
-Camera.speed = 64
+Camera.speed = 2.8
 
 function Camera.setPosition (object)
     Camera.x, Camera.y = object.rect.x - _HALFSCREENWIDTH, object.rect.y - _HALFSCREENHEIGHT

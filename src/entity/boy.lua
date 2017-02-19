@@ -5,7 +5,7 @@ local Quads = require ("src.logic.quads")
 local General = require ("src.logic.general")
 local Input = require ("src.boundary.input")
 
-Boy.rect = Rectangle (12 * 8, 12 * 8, 8, 8)
+Boy.rect = Rectangle (12 * 8, 12 * 8, 4, 8)
 Boy.spriteSheet = love.graphics.newImage ("assets/visual/sprites/player.png")
 Boy.sprites = {}
 
@@ -19,21 +19,15 @@ Boy.groundDirection = General.Directions.RIGHT
 Boy.frame = 1
 Boy.framePoint, Boy.groundAnimationSpeed, Boy.waterAnimationSpeed = 0, 5, 5
 
-Boy.maxHSpeed, Boy.maxVSpeed, Boy.jump = 3, 4, -4
+Boy.maxHSpeed, Boy.maxVSpeed, Boy.jump = 3, 6, -3
 
-function Boy.update (dt)
-    Boy.rect:setLastPosition ()
-
-    Boy.act (dt)
-end
-
-function Boy.updateHorizontally (dt)
+function Boy.updateHorizontally (dt, moving)
     if Boy.grounded and not Boy.water then
-        if Input.keyDown (Input.KEYS.RIGHT) then
+        if moving and Input.keyDown (Input.KEYS.RIGHT) then
             Boy.hSpeed = Boy.hSpeed + (6 * dt)
         end
 
-        if Input.keyDown (Input.KEYS.LEFT) then
+        if moving and Input.keyDown (Input.KEYS.LEFT) then
             Boy.hSpeed = Boy.hSpeed - (6 * dt)
         end
 
@@ -51,7 +45,7 @@ function Boy.updateHorizontally (dt)
             end
         end
 
-        if Boy.hSpeed == 0 then
+        if math.abs (Boy.hSpeed) < (Boy.friction * dt) then
             Boy.frame = 1
         else
             Boy.framePoint = Boy.framePoint + math.abs (Boy.hSpeed)
@@ -84,8 +78,8 @@ function Boy.updateHorizontally (dt)
     Boy.rect.x = Boy.rect.x + Boy.hSpeed
 end
 
-function Boy.updateVertically (dt)
-    if Boy.grounded and Input.keyPressed (Input.KEYS.UP) then
+function Boy.updateVertically (dt, moving)
+    if moving and Boy.grounded and Input.keyPressed (Input.KEYS.JUMP) then
         Boy.vSpeed = Boy.jump
     else
         Boy.gravity (dt)
@@ -109,14 +103,15 @@ function Boy.gravity (dt)
 end
 
 function Boy.render ()
-    --Boy.rect:render ()
     if not Boy.water then
         if Boy.groundDirection == General.Directions.RIGHT then
-            love.graphics.draw (Boy.spriteSheet, Boy.sprites [Boy.frame], math.floor (Boy.rect.x), math.floor (Boy.rect.y))
+            love.graphics.draw (Boy.spriteSheet, Boy.sprites [Boy.frame], math.floor (Boy.rect.x) - 2, math.floor (Boy.rect.y))
         else
-            love.graphics.draw (Boy.spriteSheet, Boy.sprites [Boy.frame], math.floor (Boy.rect.x) + 8, math.floor (Boy.rect.y), 0, -1, 1)
+            love.graphics.draw (Boy.spriteSheet, Boy.sprites [Boy.frame], math.floor (Boy.rect.x) + 6, math.floor (Boy.rect.y), 0, -1, 1)
         end
     end
+
+    --Boy.rect:render ()
 end
 
 function Boy.reset ()
@@ -129,7 +124,7 @@ function Boy.environmentCollision (rect)
     if not col then return end
 
     if col [General.Directions.DOWN] then
-        Boy.rect.y = rect.y - rect.height
+        Boy.rect.y = rect.y - Boy.rect.height
         Boy.vSpeed = 0
         Boy.grounded = true
     end
@@ -140,13 +135,34 @@ function Boy.environmentCollision (rect)
     end
 
     if col [General.Directions.RIGHT] then
-        Boy.rect.x = rect.x - rect.width
+        Boy.rect.x = rect.x - Boy.rect.width
         Boy.hSpeed = 0
     end
 
     if col [General.Directions.LEFT] then
         Boy.rect.x = rect.x + rect.width
         Boy.hSpeed = 0
+    end
+end
+
+function Boy.beeCollision (bee)
+    local beerect = bee.rect
+    local col = Boy.rect:collision (beerect)
+
+    if not col then return end
+
+    if col [General.Directions.DOWN] then
+        if bee.hSpeed == 0 then
+            beerect.y = beerect.y + 0.1
+            Boy.rect.y = beerect.y - Boy.rect.height
+            Boy.vSpeed = 0
+            Boy.grounded = true
+        end
+    end
+
+    if col [General.Directions.UP] then
+        bee.vSpeed = Boy.vSpeed
+        Boy.vSpeed = 0
     end
 end
 
