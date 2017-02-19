@@ -30,21 +30,26 @@ function love.update (dt)
     checkQuit ()
 
     Play.update (dt)
+    --print (love.timer.getFPS ())
 end
 
 function love.draw ()
     love.graphics.setCanvas (_CANVAS)
     love.graphics.setBlendMode ("alpha", "alphamultiply")
 
-    love.graphics.clear (Palette [_PALETTEINDEX] [3])
+    --love.graphics.clear (Palette [_PALETTEINDEX] [3])
+    love.graphics.clear (120, 120, 120)
 
-    love.graphics.setShader (_SHADER)
+    --love.graphics.setShader (_SHADER)
+    love.graphics.setShader ()
     Play.render ()
 
     love.graphics.origin ()
-    love.graphics.setShader ()
+    --love.graphics.setShader ()
+    love.graphics.setShader (_SHADER)
     love.graphics.setCanvas ()
     love.graphics.setBlendMode ("alpha", "premultiplied")
+    love.graphics.setColor (255, 255, 255, 255)
     love.graphics.draw (_CANVAS, 0, 0, 0, _SCALE, _SCALE)
 
     --[[if Input.keyPressed (Input.KEYS.DOWN) then

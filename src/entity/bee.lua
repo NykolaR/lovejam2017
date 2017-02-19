@@ -14,6 +14,7 @@ Quads.generateQuads (Bee.sprites, Bee.spriteSheet, 8)
 Bee.hSpeed, Bee.vSpeed = 0, 0
 Bee.friction = 5
 Bee.direction = General.Directions.RIGHT
+Bee.grounded = false
 
 Bee.frame = 1
 Bee.framePoint, Bee.autoAdvance, Bee.animationSpeed = 0, 2, 3
@@ -45,6 +46,11 @@ function Bee.updateHorizontally (dt, moving)
     end
 
     Bee.framePoint = Bee.framePoint + Bee.autoAdvance
+
+    if Bee.grounded and Bee.hSpeed == 0 then
+        Bee.framePoint = 0
+        Bee.frame = 1
+    end
 
     if Bee.hSpeed < 0 then
         Bee.direction = General.Directions.LEFT
@@ -109,6 +115,9 @@ function Bee.updateVertically (dt, moving)
 
     Bee.rect.y = Bee.rect.y + Bee.vSpeed
 
+    if not (Bee.vSpeed == 0) then
+        Bee.grounded = false
+    end
 end
 
 function Bee.render ()
@@ -134,15 +143,17 @@ function Bee.environmentCollision (rect, direction)
         if col [General.Directions.DOWN] then
             Bee.rect.y = rect.y - Bee.rect.height
             Bee.vSpeed = -Bee.vSpeed * 0.6
-            if math.abs (Bee.vSpeed) > Bee.friction then
+            if math.abs (Bee.vSpeed) > 2 then
                 Bee.rect.y = Bee.rect.y + Bee.vSpeed
             end
+
+            Bee.grounded = true
         end
 
         if col [General.Directions.UP] then
             Bee.rect.y = rect.y + rect.height
             Bee.vSpeed = -Bee.vSpeed * 0.6
-            if math.abs (Bee.vSpeed) > Bee.friction then
+            if math.abs (Bee.vSpeed) > 2 then
                 Bee.rect.y = Bee.rect.y + Bee.vSpeed
             end
         end
@@ -152,7 +163,7 @@ function Bee.environmentCollision (rect, direction)
         if col [General.Directions.RIGHT] then
             Bee.rect.x = rect.x - Bee.rect.width
             Bee.hSpeed = -Bee.hSpeed * 0.6
-            if math.abs (Bee.hSpeed) > Bee.friction then
+            if math.abs (Bee.hSpeed) > 2 then
                 Bee.rect.x = Bee.rect.x + Bee.hSpeed
             end
         end
@@ -160,7 +171,7 @@ function Bee.environmentCollision (rect, direction)
         if col [General.Directions.LEFT] then
             Bee.rect.x = rect.x + rect.width
             Bee.hSpeed = -Bee.hSpeed * 0.6
-            if math.abs (Bee.hSpeed) > Bee.friction then
+            if math.abs (Bee.hSpeed) > 2 then
                 Bee.rect.x = Bee.rect.x + Bee.hSpeed
             end
         end

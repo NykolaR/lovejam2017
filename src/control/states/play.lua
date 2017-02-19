@@ -53,16 +53,16 @@ function Play.render ()
         Camera.approach (Bee)
     end
     Camera.update ()
-    Camera.clear ()
     --love.graphics.clear (120, 120, 120)
 
     Area.renderEnvironment ()
     Boy.render ()
     Bee.render ()
+   
 
-    --[[for _,r in pairs (Area.collisions) do
-        r:render ()
-    end]]
+    --[[love.graphics.setShader ()
+    love.graphics.setColor (0, 0, 0, 120)
+    love.graphics.rectangle ("fill", 0, 0, 500, 500)]]
 end
 
 return Play

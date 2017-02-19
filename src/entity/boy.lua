@@ -161,7 +161,7 @@ function Boy.beeCollision (bee)
     end
 
     if col [General.Directions.UP] then
-        bee.vSpeed = Boy.vSpeed
+        bee.vSpeed = Boy.vSpeed * 0.8
         Boy.vSpeed = 0
     end
 end
