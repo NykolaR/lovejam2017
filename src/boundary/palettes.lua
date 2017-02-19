@@ -1,4 +1,5 @@
 local Palettes = {}
+Palettes.current = 1
 
 Palettes [1] = {
     {0x25, 0x29, 0x1c},
@@ -25,6 +26,15 @@ Palettes [2] = {
     {0x, 0x, 0x}
 }
 --]]
+
+function Palettes.nextPalette (shader)
+    Palettes.current = Palettes.current + 1
+    if Palettes.current > #Palettes then
+        Palettes.current = 1
+    end
+
+    Palettes.loadPalette (shader, Palettes.current)
+end
 
 function Palettes.loadPalette (shader, index)
     for i=1, #Palettes [1] do

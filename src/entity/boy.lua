@@ -5,6 +5,8 @@ local Quads = require ("src.logic.quads")
 local General = require ("src.logic.general")
 local Input = require ("src.boundary.input")
 
+local Sound = require ("src.boundary.audio.boy")
+
 Boy.rect = Rectangle (12 * 8, 12 * 8, 4, 8)
 Boy.spriteSheet = love.graphics.newImage ("assets/visual/sprites/player.png")
 Boy.sprites = {}
@@ -55,6 +57,8 @@ function Boy.updateHorizontally (dt, moving)
                     Boy.frame = 2
                 else
                     Boy.frame = 1
+                    Sound.STEP:setPosition (Boy.rect.x, Boy.rect.y)
+                    Sound.STEP:play ()
                 end
             end
         end
@@ -81,6 +85,9 @@ end
 function Boy.updateVertically (dt, moving)
     if moving and Boy.grounded and Input.keyPressed (Input.KEYS.JUMP) then
         Boy.vSpeed = Boy.jump
+
+        Sound.JUMP:setPosition (Boy.rect.x, Boy.rect.y)
+        Sound.JUMP:play ()
     else
         Boy.gravity (dt)
     end

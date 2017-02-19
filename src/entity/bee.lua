@@ -5,6 +5,8 @@ local Quads = require ("src.logic.quads")
 local General = require ("src.logic.general")
 local Input = require ("src.boundary.input")
 
+local Sound = require ("src.boundary.audio.bee")
+
 Bee.rect = Rectangle (12 * 8, 15 * 8, 6, 2)
 Bee.spriteSheet = love.graphics.newImage ("assets/visual/sprites/bee.png")
 Bee.sprites = {}
@@ -68,6 +70,10 @@ function Bee.updateHorizontally (dt, moving)
     end
 
     Bee.rect.x = Bee.rect.x + Bee.hSpeed
+
+    if hSpeed == 0 then
+        Bee.grounded = false
+    end
 end
 
 function Bee.updateVertically (dt, moving)
@@ -115,9 +121,17 @@ function Bee.updateVertically (dt, moving)
 
     Bee.rect.y = Bee.rect.y + Bee.vSpeed
 
-    if not (Bee.vSpeed == 0) then
+    if not (Bee.vSpeed == 0) or not (Bee.hSpeed == 0) then
         Bee.grounded = false
     end
+
+    if Bee.grounded and Bee.hSpeed == 0 then
+        Sound.endBuzz ()
+    else
+        Sound.startBuzz ()
+    end
+
+    Sound.setAttributes (Bee)
 end
 
 function Bee.render ()
@@ -148,6 +162,9 @@ function Bee.environmentCollision (rect, direction)
             end
 
             Bee.grounded = true
+            if Bee.hSpeed == 0 then
+                Sound.endBuzz ()
+            end
         end
 
         if col [General.Directions.UP] then

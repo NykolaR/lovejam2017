@@ -24,6 +24,12 @@ function Play.update (dt)
     end
 
     Play.updateBeeAndBoy (dt)
+
+    if Play.boyMove then
+        Camera.approach (Boy)
+    else
+        Camera.approach (Bee)
+    end
 end
 
 function Play.updateBeeAndBoy (dt)
@@ -47,22 +53,18 @@ function Play.playableCollide (playable, direction)
 end
 
 function Play.render ()
-    if Play.boyMove then
-        Camera.approach (Boy)
-    else
-        Camera.approach (Bee)
-    end
     Camera.update ()
-    --love.graphics.clear (120, 120, 120)
 
+    Camera.renderParallex ()
+
+    Area.renderBelow ()
     Area.renderEnvironment ()
     Boy.render ()
     Bee.render ()
-   
 
-    --[[love.graphics.setShader ()
-    love.graphics.setColor (0, 0, 0, 120)
-    love.graphics.rectangle ("fill", 0, 0, 500, 500)]]
+    love.graphics.setColor (255, 255, 255, 128)
+    Area.renderAbove ()
+    love.graphics.setColor (255, 255, 255, 255)
 end
 
 return Play

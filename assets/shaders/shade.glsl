@@ -11,13 +11,13 @@ vec4 effect (vec4 color, Image texture, vec2 texture_coords, vec2 screen_coords)
 
     vec3 colorOut;
 
-    if (ave == 0.0) {
+    if (ave < 0.1) {
         colorOut = col1;
     } else if (ave <= 0.25) {
         colorOut = col2;
     } else if (ave <= 0.5) {
         colorOut = col3;
-    } else if (ave <= 0.75) {
+    } else if (ave <= 0.7) {
         colorOut = col4;
     } else {
         colorOut = col5;
