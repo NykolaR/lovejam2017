@@ -41,7 +41,7 @@ function Area.loadArea ()
         end
     end
 
-    table.insert (Area.water, Water (0, 35 * 8, Area.width * 8, Area.height * 4))
+    table.insert (Area.water, Water (0, 35 * 8 + 2, Area.width * 8, Area.height * 4))
 end
 
 function Area.getX (index)
@@ -80,8 +80,6 @@ function Area.renderAbove ()
         for x=0, Area.width - 1 do
             if ((x * 8) > xMin and (x * 8) < xMax) and ((y * 8) > yMin and (y * 8) < yMax) then
                 if not (Area.above [index] == 0) then
-                    --love.graphics.draw (Area.decoration, Area.decorationTiles [2], x * Area.tileSize, y * Area.tileSize)
-                    --love.graphics.draw (Area.decoration, Area.decorationTiles [Area.above [index]], x * Area.tileSize, y * Area.tileSize)
                     love.graphics.draw (Area.tileSheet, Area.tiles [Area.above [index]] , x * Area.tileSize, y * Area.tileSize)
                 end
             end

@@ -4,7 +4,7 @@ local rate, bits, channels = 16000, 8, 1
 local samples = rate / 1024
 Bee.soundData = love.sound.newSoundData (samples, rate, bits, channels)
 
-love.math.setRandomSeed (os.time ())
+love.math.setRandomSeed (0)
 
 -- Generate noise
 for i=0, samples - 1 do
@@ -17,14 +17,14 @@ end
 
 Bee.sound = love.audio.newSource (Bee.soundData)
 Bee.sound:setLooping (true)
-Bee.sound:setVolume (0.01)
+Bee.sound:setVolume (0.013)
 Bee.sound:setPitch (0.2)
 Bee.sound:setRelative (false)
 Bee.sound:setAttenuationDistances (1, 82)
 love.audio.play (Bee.sound)
 
 function Bee.startBuzz ()
-    Bee.sound:setVolume (0.01)
+    Bee.sound:setVolume (0.013)
 end
 
 function Bee.endBuzz ()

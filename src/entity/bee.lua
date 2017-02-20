@@ -71,9 +71,9 @@ function Bee.updateHorizontally (dt, moving)
 
     Bee.rect.x = Bee.rect.x + Bee.hSpeed
 
-    if hSpeed == 0 then
-        Bee.grounded = false
-    end
+    --if Bee.hSpeed == 0 then
+    --    Bee.grounded = false
+    --end
 end
 
 function Bee.updateVertically (dt, moving)
@@ -148,7 +148,7 @@ function Bee.reset ()
     Bee.rect.x, Bee.rect.y = 0, 0
 end
 
-function Bee.environmentCollision (rect, direction)
+function Bee.environmentCollision (rect, direction, water)
     local col = Bee.rect:collision (rect)
 
     if not col then return end
@@ -160,10 +160,12 @@ function Bee.environmentCollision (rect, direction)
             if math.abs (Bee.vSpeed) > 2 then
                 Bee.rect.y = Bee.rect.y + Bee.vSpeed
             end
-
-            Bee.grounded = true
-            if Bee.hSpeed == 0 then
-                Sound.endBuzz ()
+            
+            if not water then
+                Bee.grounded = true
+                if Bee.hSpeed == 0 then
+                    Sound.endBuzz ()
+                end
             end
         end
 
@@ -193,6 +195,10 @@ function Bee.environmentCollision (rect, direction)
             end
         end
     end
+end
+
+function Bee.waterCollision (rect, direction)
+    Bee.environmentCollision (rect, direction, true)
 end
 
 return Bee
