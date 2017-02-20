@@ -3,9 +3,12 @@ local _CANVAS = love.graphics.newCanvas (_INITIALWIDTH, _INITIALHEIGHT, "rgba8")
 
 local _SCALE = 1
 local _SHADER = love.graphics.newShader ("assets/shaders/shade.glsl")
-local _PALETTEINDEX = 1
+--local _PALETTEINDEX = 1
 
-local Play = require ("src.control.states.play")
+local _TITLESCREEN = love.graphics.newImage ("assets/visual/sprites/logo.png")
+local _MUSIC = love.audio.newSource ("assets/audio/music/main.ogg", "stream")
+
+local Play-- = require ("src.control.states.play")
 local Pause = require ("src.control.states.pause")
 
 
@@ -16,8 +19,8 @@ local font = love.graphics.newImageFont ("assets/visual/font.png",
     " abcdefghijklmnopqrstuvwxyz0123456789", 1)
 love.graphics.setFont (font)
 
-local GAMESTATE = {PLAY = 1, PAUSE = 2}
-local state = GAMESTATE.PLAY
+local GAMESTATE = {PLAY = 1, PAUSE = 2, TITLE = 3}
+local state = GAMESTATE.TITLE
 
 local PauseSounds = require ("src.boundary.audio.pause")
 
@@ -26,8 +29,12 @@ function love.load ()
     _CANVAS:setFilter ("nearest", "nearest")
     Palette.loadPalette (_SHADER)
 
+    _MUSIC:setLooping (true)
+    _MUSIC:setVolume (0.5)
+    _MUSIC:play ()
+
     love.audio.setDistanceModel ("linearclamped")
-    Play.loadArea ()
+    --Play.loadArea ()
 end
 
 function love.update (dt)
@@ -59,6 +66,10 @@ function love.update (dt)
             Pause.selected = 1
         elseif state == GAMESTATE.PAUSE then
             state = GAMESTATE.PLAY
+        elseif state == GAMESTATE.TITLE then
+            Play = require ("src.control.states.play")
+            Play.loadArea ()
+            state = GAMESTATE.PLAY
         end
         PauseSounds.OPEN:play ()
     end
@@ -72,18 +83,13 @@ function love.draw ()
     love.graphics.setBlendMode ("alpha", "alphamultiply")
 
     love.graphics.clear (Palette [Palette.current] [3])
-    --love.graphics.clear (120, 120, 120)
-
-    --love.graphics.setShader (_SHADER)
-    --love.graphics.setShader ()
+    love.graphics.setShader (_SHADER)
 
     if state == GAMESTATE.PLAY then
-        love.graphics.setShader (_SHADER)
         Play.render ()
         love.graphics.origin ()
         love.graphics.setShader ()
     elseif state == GAMESTATE.PAUSE then
-        love.graphics.setShader (_SHADER)
         Play.render ()
         love.graphics.origin ()
         love.graphics.setShader ()
@@ -91,8 +97,9 @@ function love.draw ()
         love.graphics.rectangle ("fill", 0, 0, _INITIALWIDTH, _INITIALHEIGHT)
         love.graphics.setColor (255, 255, 255, 255)
         Pause.render ()
-
-        --love.graphics.setShader ()
+    elseif state == GAMESTATE.TITLE then
+        love.graphics.draw (_TITLESCREEN, 0, 0)
+        love.graphics.setShader ()
     end
 
     --love.graphics.setShader ()

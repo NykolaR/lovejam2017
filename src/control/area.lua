@@ -5,6 +5,7 @@ Area.below = {}
 Area.above = {}
 
 Area.collisions = {}
+Area.water = {}
 
 Area.width = 0
 Area.height = 0
@@ -13,6 +14,8 @@ Area.tileSize = 0
 local Rectangle = require ("src.logic.rectangle")
 local Quads = require ("src.logic.quads")
 local Camera = require ("src.entity.camera")
+
+local Water = require ("src.entity.water")
 
 Area.tileSheet = love.graphics.newImage ("assets/visual/tiles/tileset.png")
 Area.tiles = {}
@@ -38,6 +41,7 @@ function Area.loadArea ()
         end
     end
 
+    table.insert (Area.water, Water (0, 35 * 8, Area.width * 8, Area.height * 4))
 end
 
 function Area.getX (index)
@@ -99,6 +103,12 @@ function Area.renderBelow ()
             end
             index = index + 1
         end
+    end
+end
+
+function Area.renderWater ()
+    for _,water in pairs (Area.water) do
+        water:render ()
     end
 end
 

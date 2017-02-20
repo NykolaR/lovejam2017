@@ -58,12 +58,17 @@ function Play.render ()
     Camera.renderParallex ()
 
     Area.renderBelow ()
-    Area.renderEnvironment ()
+
     Boy.render ()
     Bee.render ()
 
-    love.graphics.setColor (255, 255, 255, 128)
     Area.renderAbove ()
+
+    Area.renderWater ()
+
+    Area.renderEnvironment ()
+
+    love.graphics.setColor (255, 255, 255, 128)
     love.graphics.setColor (255, 255, 255, 255)
 end
 
