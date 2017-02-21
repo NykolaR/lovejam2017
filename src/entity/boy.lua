@@ -7,7 +7,7 @@ local Input = require ("src.boundary.input")
 
 local Sound = require ("src.boundary.audio.boy")
 
-Boy.rect = Rectangle (12 * 8, 12 * 8, 4, 8)
+Boy.rect = Rectangle (3 * 8, 21 * 8, 4, 8)
 Boy.spriteSheet = love.graphics.newImage ("assets/visual/sprites/player.png")
 Boy.spriteSheet:setFilter ("nearest", "nearest")
 Boy.sprites = {}
@@ -336,6 +336,23 @@ function Boy.beeCollision (bee)
     if col [General.Directions.UP] then
         bee.vSpeed = Boy.vSpeed * 0.8
         Boy.vSpeed = 0
+    end
+end
+
+function Boy.chestCollision (chest, direction)
+    local col = Boy.rect:collision (chest.rect)
+
+    if not col then return end
+
+    if not chest.open then
+        chest.open = true
+        Sound.CHEST:play ()
+
+        if col [General.Directions.LEFT] or col [General.Directions.RIGHT] then
+            Boy.hSpeed = 0
+        else
+            Boy.vSpeed = 0
+        end
     end
 end
 

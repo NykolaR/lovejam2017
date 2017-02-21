@@ -7,7 +7,7 @@ local Input = require ("src.boundary.input")
 
 local Sound = require ("src.boundary.audio.bee")
 
-Bee.rect = Rectangle (12 * 8, 15 * 8, 6, 2)
+Bee.rect = Rectangle (2 * 8, 20 * 8, 6, 2)
 Bee.spriteSheet = love.graphics.newImage ("assets/visual/sprites/bee.png")
 Bee.sprites = {}
 
@@ -199,6 +199,16 @@ end
 
 function Bee.waterCollision (rect, direction)
     Bee.environmentCollision (rect, direction, true)
+end
+
+function Bee.chestCollision (chest, direction)
+    local col = Bee.rect:collision (chest.rect)
+
+    if not col then return end
+
+    if not chest.open then
+        chest.open = true
+    end
 end
 
 return Bee

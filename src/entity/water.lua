@@ -16,10 +16,12 @@ function Water:_init (x, y, w, h)
     self.rect = Rectangle (x, y, w, h)
 end
 
+local waterColor = 2
+
 function Water:render ()
     local lastShader = love.graphics.getShader ()
     love.graphics.setShader ()
-    love.graphics.setColor (Palette [Palette.current] [1] [1], Palette [Palette.current] [1] [2], Palette [Palette.current] [1] [3], 180)
+    love.graphics.setColor (Palette [Palette.current] [waterColor] [1], Palette [Palette.current] [waterColor] [2], Palette [Palette.current] [waterColor] [3], 180)
     love.graphics.rectangle ("fill", self.rect.x, self.rect.y - 2, self.rect.width, self.rect.height)
     --self.rect:render ()
     love.graphics.setColor (255, 255, 255, 255)

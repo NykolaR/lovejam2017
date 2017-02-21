@@ -1,5 +1,7 @@
 local Camera = {}
 
+local Palette = require ("src.boundary.palettes")
+
 local _HALFSCREENWIDTH = 10 * 8
 local _HALFSCREENHEIGHT = 9 * 8
 local _SCREENWIDTH = 20 * 8
@@ -13,16 +15,16 @@ Camera.speed = 2.8
 
 local shortMountain = love.graphics.newImage ("assets/visual/sprites/mountains1.png")
 shortMountain:setWrap ("repeat", "clamp")
-local shortMountainQuad = love.graphics.newQuad (0, 0, shortMountain:getWidth () * 3, shortMountain:getHeight (), shortMountain:getWidth (), shortMountain:getHeight ())
+local shortMountainQuad = love.graphics.newQuad (0, 0, shortMountain:getWidth () * 12, shortMountain:getHeight (), shortMountain:getWidth (), shortMountain:getHeight ())
 local tallMountain = love.graphics.newImage ("assets/visual/sprites/mountains2.png")
 tallMountain:setWrap ("repeat", "clamp")
-local tallMountainQuad = love.graphics.newQuad (0, 0, tallMountain:getWidth () * 6, tallMountain:getHeight (), tallMountain:getWidth (), tallMountain:getHeight ())
+local tallMountainQuad = love.graphics.newQuad (0, 0, tallMountain:getWidth () * 24, tallMountain:getHeight (), tallMountain:getWidth (), tallMountain:getHeight ())
 
 local cloudsThick = love.graphics.newImage ("assets/visual/sprites/cloudsthick.png")
 cloudsThick:setWrap ("repeat", "clamp")
 cloudsThin = love.graphics.newImage ("assets/visual/sprites/cloudsthin.png")
 cloudsThin:setWrap ("repeat", "clamp")
-local cloudsQuad = love.graphics.newQuad (0, 0, cloudsThick:getWidth () * 6, cloudsThick:getHeight (), cloudsThin:getWidth (), cloudsThick:getHeight ())
+local cloudsQuad = love.graphics.newQuad (0, 0, cloudsThick:getWidth () * 24, cloudsThick:getHeight (), cloudsThin:getWidth (), cloudsThick:getHeight ())
 function Camera.setPosition (object)
     Camera.x, Camera.y = object.rect.x - _HALFSCREENWIDTH, object.rect.y - _HALFSCREENHEIGHT
 
@@ -62,6 +64,19 @@ function Camera.approach (object)
     --love.audio.setVelocity (object.hSpeed, object.vSpeed)
 end
 
+function Camera.endGame ()
+    love.graphics.setColor (Palette [Palette.current] [5])
+    love.graphics.rectangle ("fill", 7 * 8 - 2 + math.floor (Camera.x), 10 + math.floor (Camera.y), 7 * 8 + 4, 7 * 4 + 4, 8, 8, 2)
+    love.graphics.setColor (Palette [Palette.current] [1])
+    love.graphics.rectangle ("fill", 7 * 8 + math.floor (Camera.x), 12 + math.floor (Camera.y), 7 * 8, 7 * 4, 8, 8, 2)
+
+
+    love.graphics.setColor (Palette [Palette.current] [5])
+    
+
+    love.graphics.print ("  end   ", 8 * 8 + math.floor (Camera.x), 3 * 8 + math.floor (Camera.y))
+end
+
 function Camera.bound ()
     if Camera.x < 0 then
         Camera.x = 0
@@ -90,20 +105,20 @@ function Camera.update ()
 end
 
 function Camera.renderParallex ()
-    local renderX = math.floor (Camera.x * 0.9) + tallMountain:getWidth () * (math.floor (Camera.x / _SCREENWIDTH)) - _HALFSCREENWIDTH
+    local renderX = math.floor (Camera.x * 0.9) + tallMountain:getWidth () * (math.floor (Camera.x / _SCREENWIDTH)) - (_SCREENWIDTH * 4)
+    local baseY = 6 * 8
     love.graphics.setColor (255, 255, 255, 128)
-    love.graphics.draw (cloudsThin, cloudsQuad, renderX, 8 * 22)
-    renderX = math.floor (Camera.x * 0.7) + tallMountain:getWidth () * (math.floor (Camera.x / _SCREENWIDTH)) - _HALFSCREENWIDTH
-    love.graphics.draw (tallMountain, tallMountainQuad, renderX, 8 * 19)
-    renderX = math.floor (Camera.x * 0.6) + tallMountain:getWidth () * (math.floor (Camera.x / _SCREENWIDTH)) - _HALFSCREENWIDTH
-    love.graphics.draw (cloudsThick, cloudsQuad, renderX, 8 * 29)
-    renderX = math.floor (Camera.x * 0.5) + shortMountain:getWidth () * (math.floor (Camera.x / _SCREENWIDTH)) - _HALFSCREENWIDTH
+    love.graphics.draw (cloudsThin, cloudsQuad, renderX, baseY + (8 * 3))
+    renderX = math.floor (Camera.x * 0.7) + tallMountain:getWidth () * (math.floor (Camera.x / _SCREENWIDTH)) - (_SCREENWIDTH * 4)
+    love.graphics.draw (tallMountain, tallMountainQuad, renderX, baseY)
+    love.graphics.draw (cloudsThick, cloudsQuad, renderX, baseY + (8 * 10))
+    renderX = math.floor (Camera.x * 0.5) + shortMountain:getWidth () * (math.floor (Camera.x / _SCREENWIDTH)) - (_SCREENWIDTH * 4)
     love.graphics.setColor (255, 255, 255, 255)
-    love.graphics.draw (shortMountain, shortMountainQuad, renderX, 8 * 27)
+    love.graphics.draw (shortMountain, shortMountainQuad, renderX, baseY + (8 * 8))
 
     love.graphics.setColor (255, 255, 255, 60)
-    renderX = math.floor (Camera.x * 0.55) + tallMountain:getWidth () * (math.floor (Camera.x / _SCREENWIDTH)) - _HALFSCREENWIDTH
-    love.graphics.draw (cloudsThick, cloudsQuad, renderX - 11, 8 * 29 + 3)
+    renderX = math.floor (Camera.x * 0.55) + tallMountain:getWidth () * (math.floor (Camera.x / _SCREENWIDTH)) - (_SCREENWIDTH * 4)
+    love.graphics.draw (cloudsThick, cloudsQuad, renderX - 11, baseY + (10 * 8) + 3)
     love.graphics.setColor (255, 255, 255, 255)
 end
 

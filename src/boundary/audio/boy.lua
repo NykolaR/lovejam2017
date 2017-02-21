@@ -11,4 +11,7 @@ Boy.SPLASH:setVolume (0.4)
 
 Boy.SWIM = love.audio.newSource ("assets/audio/effects/swim.wav")
 
+Boy.CHEST = love.audio.newSource ("assets/audio/effects/chest.wav")
+Boy.CHEST:setVolume (0.4)
+
 return Boy

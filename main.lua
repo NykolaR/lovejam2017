@@ -1,7 +1,7 @@
 local _INITIALWIDTH, _INITIALHEIGHT = 20 * 8, 18 * 8
 local _CANVAS = love.graphics.newCanvas (_INITIALWIDTH, _INITIALHEIGHT, "rgba8")
 
-local _SCALE = 1
+local _SCALE = 3
 local _SHADER = love.graphics.newShader ("assets/shaders/shade.glsl")
 --local _PALETTEINDEX = 1
 
