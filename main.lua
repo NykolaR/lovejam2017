@@ -48,7 +48,7 @@ function love.update (dt)
     if state == GAMESTATE.PAUSE then
         Pause.update ()
 
-        if Input.keyPressed (Input.KEYS.ACTION) then
+        if Input.keyPressed (Input.KEYS.JUMP) then
             if Pause.selected == 1 then
                 Palette.nextPalette (_SHADER)
             elseif Pause.selected == 2 then
@@ -74,8 +74,12 @@ function love.update (dt)
         PauseSounds.OPEN:play ()
     end
 
-    --print (love.timer.getFPS ())
-    --print (love.audio.getPosition ())
+    if Input.keyPressed (Input.KEYS.ACTION) then
+        if state == GAMESTATE.PAUSE then
+            state = GAMESTATE.PLAY
+            PauseSounds.OPEN:play ()
+        end
+    end
 end
 
 function love.draw ()

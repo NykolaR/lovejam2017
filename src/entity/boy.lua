@@ -17,14 +17,16 @@ Quads.generateQuads (Boy.sprites, Boy.spriteSheet, 8)
 Boy.hSpeed, Boy.vSpeed = 0, 0
 Boy.friction = 4
 Boy.grounded, Boy.water = false, false
+Boy.lastWater = false
 Boy.groundDirection = General.Directions.RIGHT
 
 Boy.frame = 1
 Boy.framePoint, Boy.groundAnimationSpeed, Boy.waterAnimationSpeed = 0, 5, 5
 
-Boy.speed = 6
+Boy.speed = 7
 
 Boy.maxHSpeed, Boy.maxVSpeed, Boy.jump = 3, 6, -3
+Boy.maxWSpeed = 3
 
 function Boy.updateHorizontally (dt, moving)
     if Boy.water then
@@ -41,6 +43,7 @@ function Boy.updateVertically (dt, moving)
         Boy.updateVerticallyGround (dt, moving)
     end
 
+    Boy.lastWater = Boy.water
     Boy.water = false
 end
 
@@ -74,11 +77,11 @@ function Boy.updateHorizontallyWater (dt, moving)
         Boy.groundDirection = General.Directions.RIGHT
     end
 
-    if math.abs (Boy.hSpeed) > Boy.maxHSpeed then
+    if math.abs (Boy.hSpeed) > Boy.maxWSpeed then
         if Boy.hSpeed < 0 then
-            Boy.hSpeed = -Boy.maxHSpeed
+            Boy.hSpeed = -Boy.maxWSpeed
         else
-            Boy.hSpeed = Boy.maxHSpeed
+            Boy.hSpeed = Boy.maxWSpeed
         end
     end
 
@@ -124,11 +127,11 @@ function Boy.updateVerticallyWater (dt, moving)
         end
     end
 
-    if math.abs (Boy.vSpeed) > Boy.maxHSpeed then
+    if math.abs (Boy.vSpeed) > Boy.maxWSpeed then
         if Boy.vSpeed < 0 then
-            Boy.vSpeed = -Boy.maxHSpeed
+            Boy.vSpeed = -Boy.maxWSpeed
         else
-            Boy.vSpeed = Boy.maxHSpeed
+            Boy.vSpeed = Boy.maxWSpeed
         end
     end
 
@@ -136,7 +139,7 @@ function Boy.updateVerticallyWater (dt, moving)
 end
 
 function Boy.updateHorizontallyGround (dt, moving)
-    if Boy.grounded and not Boy.water then
+    if Boy.grounded then
         if moving and Input.keyDown (Input.KEYS.RIGHT) then
             Boy.hSpeed = Boy.hSpeed + (6 * dt)
         end
@@ -181,6 +184,14 @@ function Boy.updateHorizontallyGround (dt, moving)
         if Boy.hSpeed > 0 then
             Boy.groundDirection = General.Directions.RIGHT
         end
+    else
+        if moving and Input.keyDown (Input.KEYS.RIGHT) then
+            Boy.hSpeed = Boy.hSpeed + (1 * dt)
+        end
+
+        if moving and Input.keyDown (Input.KEYS.LEFT) then
+            Boy.hSpeed = Boy.hSpeed - (1 * dt)
+        end
     end
 
     if math.abs (Boy.hSpeed) > Boy.maxHSpeed then
@@ -195,13 +206,18 @@ function Boy.updateHorizontallyGround (dt, moving)
 end
 
 function Boy.updateVerticallyGround (dt, moving)
-    if moving and Boy.grounded and Input.keyPressed (Input.KEYS.JUMP) then
+    if moving and Boy.grounded and (Input.keyPressed (Input.KEYS.JUMP) or Input.keyPressed (Input.KEYS.UP)) then
         Boy.vSpeed = Boy.jump
 
         Sound.JUMP:setPosition (Boy.rect.x, Boy.rect.y)
         Sound.JUMP:play ()
     else
         Boy.gravity (dt)
+    end
+
+    if Boy.lastWater and math.abs (Boy.vSpeed) < 1.2 then
+        print ("wee")
+        Boy.vSpeed = -1.2
     end
 
     if math.abs (Boy.vSpeed) > Boy.maxVSpeed then

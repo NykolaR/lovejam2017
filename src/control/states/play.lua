@@ -21,7 +21,6 @@ function Play.loadArea ()
 end
 
 function Play.update (dt)
-
     if not Play.GAMEOVER then
         if Input.keyPressed (Input.KEYS.ACTION) then
             Play.boyMove = not Play.boyMove

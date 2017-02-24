@@ -13,36 +13,33 @@
 local input = {}
 input ["INPUT"] = {KEY_DOWN = 1, KEY_PRESSED = 2} --[[ DO NOT MODIFY ]]--
 
-local PADVALUES = {
-    ["b"] = 2, -- LK
-    ["a"] = 3, -- MK
-    ["y"] = 1, -- LP
-    ["x"] = 4, -- MP
-    ["rb"] = 6,
-    ["lb"] = 5,
-    ["rt"] = 8,
-    ["lt"] = 7,
-    ["start"] = 10,
-    ["select"] = 9
-}
-
 --[[ "Inputs" to be mapped --]]
 input ["KEYS"] = {LEFT = 1, RIGHT = 2, UP = 3, DOWN = 4, JUMP = 5, ACTION = 6, PAUSE = 7}
 
 --[[ Keyboard mappings --]]
 input ["KEYBOARD_KEYS"] =
-{LEFT = {"left", "a"}, RIGHT = {"right", "d"}, UP = {"up", "w"}, DOWN = {"down", "s"}, JUMP = {"space"}, ACTION = {"b"}, PAUSE = {"return"}}
+{LEFT = {"left", "a"}, RIGHT = {"right", "d"}, UP = {"up", "w"}, DOWN = {"down", "s"}, JUMP = {"up", "w"}, ACTION = {"space"}, PAUSE = {"return"}}
 
---[[ Joystick mappings. Automatically handles hat --]]
--- TODO: Handle axis and multiple controllers --
+--[[ Joystick mappings --]]
 input ["JOYSTICK_KEYS"] =
-{JUMP = {PADVALUES.b}, ACTION = {PADVALUES.a}, PAUSE = {PADVALUES.start}}
+{LEFT = {"dpleft"}, RIGHT = {"dpright"}, UP = {"dpup"}, DOWN = {"dpdown"}, JUMP = {"dpup"}, ACTION = {"a"}, PAUSE = {"start"}}
 
 input ["keys"] = {}
 
 local Joysticks = love.joystick.getJoysticks ()
 if #Joysticks > 0 then
     input.joystick = Joysticks [1]
+end
+
+function love.joystickpressed (joystick, button)
+    print ("Button: " .. button)
+end
+function love.gamepadpressed (joystick, button)
+    print ("Pad: " .. button)
+end
+
+function love.joystickaxis (joystick, axis, value)
+    print ("Ax: " .. axis .. ", Val: " .. value)
 end
 
 for x = 1, 2 do -- 2 columns
@@ -53,15 +50,13 @@ for x = 1, 2 do -- 2 columns
     end
 end
 
-function love.joystickadded (joystick)
-    if not input.joystick then
-        input.joystick = joystick
-    end
-end
-
 function input.handleInputs ()
-    if input.joystick and love.joystick.getJoystickCount () > 0 then
+    --input.handleKeyboard ()
+    
+    if input.joystick then
         input.handleJoystick ()
+
+        print (input.joystick:getHat (1))
     else
         input.handleKeyboard ()
     end
@@ -77,42 +72,12 @@ function input:handleJoystick ()
     for i,v in pairs (input.JOYSTICK_KEYS) do
         input.checkJDown (v, input.KEYS [i])
     end
-
-    -- HANDLE HATS
-    local hatPos = input.joystick:getHat (1)
-    local settings = {false, false, false, false}
-    if hatPos == "u" then
-        settings [1] = true
-    elseif hatPos == "ru" then
-        settings [1] = true
-        settings [2] = true
-    elseif hatPos == "r" then
-        settings [2] = true
-    elseif hatPos == "rd" then
-        settings [2] = true
-        settings [3] = true
-    elseif hatPos == "d" then
-        settings [3] = true
-    elseif hatPos == "ld" then
-        settings [3] = true
-        settings [4] = true
-    elseif hatPos == "l" then
-        settings [4] = true
-    elseif hatPos == "lu" then
-        settings [4] = true
-        settings [1] = true
-    end
-
-    input.setKey (input.KEYS.UP, settings [1])
-    input.setKey (input.KEYS.RIGHT, settings [2])
-    input.setKey (input.KEYS.DOWN, settings [3])
-    input.setKey (input.KEYS.LEFT, settings [4])
 end
 
 function input.checkJDown (joyKey, keyAction)
     local val = false
     for i,v in pairs (joyKey) do
-        if input.joystick:isDown (v) then
+        if input.joystick:isGamepadDown (v) then
             val = true
         end
     end
