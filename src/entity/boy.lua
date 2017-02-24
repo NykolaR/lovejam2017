@@ -216,7 +216,6 @@ function Boy.updateVerticallyGround (dt, moving)
     end
 
     if Boy.lastWater and math.abs (Boy.vSpeed) < 1.2 then
-        print ("wee")
         Boy.vSpeed = -1.2
     end
 
